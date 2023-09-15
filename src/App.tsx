@@ -4,10 +4,10 @@ import UserPanel from "./components/UserPanel";
 
 function App() {
   return (
-    <div className="flex flex-nowrap h-screen">
+    <div className="flex justify-center h-screen">
       <Router>
         <Routes>
-          <Route path="/admin" element={<AdminPanel />}></Route>
+          <Route path="/admin/*" element={<AdminPanel />}></Route>
           <Route path="/" element={<UserPanel />}></Route>
         </Routes>
       </Router>
@@ -16,3 +16,9 @@ function App() {
 }
 
 export default App;
+{
+  // /* <DatePicker
+  //             value={deliveryDate}
+  //             onChange={(newDeliveryDate) => setDeliveryDate(newDeliveryDate)}
+  //           /> */
+}

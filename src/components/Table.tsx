@@ -5,6 +5,7 @@ import TableHead from "./TableHead";
 interface TableColumn {
   name: string;
   label: string;
+  format?: (value: any) => string;
 }
 
 interface DataItem {
@@ -40,3 +41,4 @@ function Table({ columns, data }: TableProps) {
 }
 
 export default Table;
+export type { TableColumn, TableProps, DataItem };
