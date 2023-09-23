@@ -3,22 +3,10 @@ import ClientTableController from "./ClientTableController";
 import SideBar from "./SideBar";
 
 const columnsCustomer = [
-  {
-    name: "firstName",
-    label: "Imię",
-  },
-  {
-    name: "lastName",
-    label: "Nazwisko",
-  },
-  {
-    name: "emailAddress",
-    label: "Email",
-  },
-  {
-    name: "phoneNumber",
-    label: "Telefon",
-  },
+  { name: "firstName", label: "Imię" },
+  { name: "lastName", label: "Nazwisko" },
+  { name: "emailAddress", label: "Email" },
+  { name: "phoneNumber", label: "Telefon" },
 ];
 
 const columnsOrder = [

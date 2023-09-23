@@ -1,7 +1,7 @@
 import FormPanel from "./FormPanel";
 import buruberi from "../assets/buruberi.png";
 import logo from "../assets/Borówka amerykańska przez.svg";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import PaymentPanel from "./PaymentPanel";
 
 function UserPanel() {
@@ -24,7 +24,7 @@ function UserPanel() {
   };
 
   const style = {
-    height: "35rem",
+    height: "32rem",
     width: "50rem",
   };
 

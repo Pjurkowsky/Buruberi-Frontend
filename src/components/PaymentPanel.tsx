@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import FormInput from "./FormInput";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -9,12 +8,51 @@ interface PaymentPanelProps {
   formData: FormData;
   style: React.CSSProperties;
 }
-
+const fetchDataPost = async (url: URL, body: BodyInit) => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    });
+    return response;
+  } catch (error) {
+    console.log("ERROR", error);
+  }
+};
 function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    const responseCustomer = await fetchDataPost(
+      new URL("http://localhost:8080/api/customer/add"),
+      JSON.stringify(dataObject)
+    );
+
+    if (!responseCustomer) {
+      console.log("error");
+      return;
+    }
+
+    const responseCustomerData = await responseCustomer.json();
+    console.log(responseCustomerData);
+    const orderObject = {
+      address: dataObject.address,
+      city: dataObject.city,
+      customer: responseCustomerData,
+      deliveryDate: dataObject!.deliveryDate,
+      amount: dataObject.amount,
+    };
+
+    const responseOrder = await fetchDataPost(
+      new URL("http://localhost:8080/api/order/add"),
+      JSON.stringify(orderObject)
+    );
+    console.log(responseOrder);
+  };
 
   const dataObject = Object.fromEntries(formData);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div
@@ -49,7 +87,6 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
               </div>
 
               <div className="mt-5">
-                {" "}
                 <FormInput
                   value={dataObject.phoneNumber.toString()}
                   labelText="Numer Telefonu"
@@ -58,7 +95,6 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
               </div>
 
               <div className="mt-5">
-                {" "}
                 <FormInput
                   value={dataObject.emailAddress.toString()}
                   labelText="Email"
@@ -67,9 +103,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
               </div>
 
               <div className="mt-5">
-                {" "}
                 <FormInput
-                  className="cwel"
                   value={dataObject.amount.toString() + " kg"}
                   labelText={"Zamówina ilość"}
                   disabled
@@ -77,20 +111,13 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
               </div>
 
               <div className="mt-5">
-                {" "}
                 <DatePicker
                   disabled
-                  className="cursor-not-allowed"
                   label="Data dostawy"
                   defaultValue={dayjs()}
                 />
               </div>
             </div>
-
-            {/* Łukasz Wdowiak <br />
-          Piaskowa 5c/7 Police <br />
-          +48 533 208 942 <br />
-          lukaszwdowiak01@gmail.com <br />5 kg */}
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col">
             <div className="flex flex-col">
@@ -112,7 +139,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
               </div>
               <div className="flex items-center">
                 <input
-                  checked
+                  defaultChecked
                   id="default-radio-2"
                   type="radio"
                   value=""
@@ -153,6 +180,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
           <button
             type="submit"
             className="ml-auto mt-3 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-15 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={handleSubmit}
           >
             Przejdz do płatności
           </button>

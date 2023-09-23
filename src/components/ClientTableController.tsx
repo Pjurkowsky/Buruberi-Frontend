@@ -12,7 +12,6 @@ function flattenObject(obj: Record<string, any>, parentKey = ""): DataItem {
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const newKey = parentKey ? `${parentKey}.${key}` : key;
-
       if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
         const flattened = flattenObject(obj[key], newKey);
         Object.assign(result, flattened);
@@ -21,7 +20,6 @@ function flattenObject(obj: Record<string, any>, parentKey = ""): DataItem {
       }
     }
   }
-
   return result;
 }
 

@@ -36,49 +36,16 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
   let dataObject;
 
   if (formData && Symbol.iterator in formData) {
-    // Ensure formData is iterable
     dataObject = Object.fromEntries(formData);
   } else {
-    // Handle the case where formData is not iterable (optional)
     dataObject = objectwew;
   }
-  const fetchDataPost = async (url: URL, body: BodyInit) => {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: body,
-    });
-    return response;
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
     event.preventDefault();
+    formData.append("deliveryDate", deliveryDate!.toString());
     onSubmit(formData);
-    // const dataObject = Object.fromEntries(formData);
-
-    // const responseCustomer = await fetchDataPost(
-    //   new URL("http://localhost:8080/api/customer/add"),
-    //   JSON.stringify(dataObject)
-    // );
-    // const responseCustomerData = await responseCustomer.json();
-
-    // const orderObject = {
-    //   address: dataObject.address,
-    //   city: dataObject.city,
-    //   customer: responseCustomerData,
-    //   deliveryDate: deliveryDate,
-    //   amount: dataObject.amount,
-    // };
-
-    // const responseOrder = await fetchDataPost(
-    //   new URL("http://localhost:8080/api/order/add"),
-    //   JSON.stringify(orderObject)
-    // );
-    // console.log(responseOrder);
   };
 
   return (
@@ -144,7 +111,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               labelText="Ilość w kg *"
               errorMessage="Pole powinno zawierać tylko liczby"
             />
-            <div className="ml-5">
+            <div className="ml-5 ">
               <DatePicker
                 onChange={(newDeliveryDate) => setDeliveryDate(newDeliveryDate)}
                 defaultValue={dayjs()}
@@ -157,7 +124,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               />
             </div>
           </div>
-          <div className="flex items-start mb-2 mt-10 ">
+          <div className="flex items-start  ">
             <div className="flex items-center h-5 ml-auto">
               <input
                 id="remember"
@@ -188,7 +155,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               *.
             </label>
           </div>
-          <div className="flex justify-end mt-10">
+          <div className="flex justify-end mt-6">
             <button
               type="submit"
               className="mt-3 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-15 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
