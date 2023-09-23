@@ -16,9 +16,3 @@ function App() {
 }
 
 export default App;
-{
-  // /* <DatePicker
-  //             value={deliveryDate}
-  //             onChange={(newDeliveryDate) => setDeliveryDate(newDeliveryDate)}
-  //           /> */
-}
