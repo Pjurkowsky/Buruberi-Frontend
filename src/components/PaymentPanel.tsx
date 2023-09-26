@@ -2,28 +2,17 @@ import FormInput from "./FormInput";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import fetchDataPost from "../utils/fetchData";
 
 interface PaymentPanelProps {
   back: () => void;
   formData: FormData;
   style: React.CSSProperties;
 }
-const fetchDataPost = async (url: URL, body: BodyInit) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: body,
-    });
-    return response;
-  } catch (error) {
-    console.log("ERROR", error);
-  }
-};
+
 function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
+  const dataObject = Object.fromEntries(formData);
+
   const handleSubmit = async () => {
     const responseCustomer = await fetchDataPost(
       new URL("http://localhost:8080/api/customer/add"),
@@ -36,14 +25,17 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
     }
 
     const responseCustomerData = await responseCustomer.json();
-    console.log(responseCustomerData);
     const orderObject = {
       address: dataObject.address,
       city: dataObject.city,
       customer: responseCustomerData,
-      deliveryDate: dataObject!.deliveryDate,
+      deliveryDate: dayjs(dataObject!.deliveryDate.toString()).format(
+        "YYYY-MM-DD"
+      ),
       amount: dataObject.amount,
     };
+
+    console.log(orderObject);
 
     const responseOrder = await fetchDataPost(
       new URL("http://localhost:8080/api/order/add"),
@@ -52,7 +44,6 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
     console.log(responseOrder);
   };
 
-  const dataObject = Object.fromEntries(formData);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div
@@ -114,7 +105,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
                 <DatePicker
                   disabled
                   label="Data dostawy"
-                  defaultValue={dayjs()}
+                  defaultValue={dayjs()} // TU KURWA JEST ZLE
                 />
               </div>
             </div>

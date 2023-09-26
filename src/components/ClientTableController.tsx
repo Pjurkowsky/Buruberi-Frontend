@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Table, { DataItem, TableColumn } from "./Table";
+import PopupCustomer from "./PopupCustomer";
 
 interface TablePanelProps {
   url: URL;
@@ -25,6 +26,7 @@ function flattenObject(obj: Record<string, any>, parentKey = ""): DataItem {
 
 function ClientTableController({ url, columns }: TablePanelProps) {
   const [data, setData] = useState<DataItem[]>([]);
+  const [popupCustomerSubmitted, setPopupCustomerSubmitted] = useState(0);
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -43,9 +45,18 @@ function ClientTableController({ url, columns }: TablePanelProps) {
       setData(data);
     };
     dataFetch();
-  }, [url]);
+  }, [url, popupCustomerSubmitted]);
 
-  return <Table columns={columns} data={data} />;
+  const handleCustomerSubmitted = () => {
+    setPopupCustomerSubmitted((prevCount) => prevCount + 1);
+  };
+
+  return (
+    <div className="flex">
+      <PopupCustomer onSubmit={handleCustomerSubmitted} />
+      <Table columns={columns} data={data} />
+    </div>
+  );
 }
 
 export default ClientTableController;

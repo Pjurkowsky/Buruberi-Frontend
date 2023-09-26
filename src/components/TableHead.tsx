@@ -12,7 +12,7 @@ function TableHead({ columns, handleSorting }: any) {
   };
 
   return (
-    <thead className="text-xs text-gray-700 uppercase bg-gray-50 light:bg-gray-700 dark:text-gray-400">
+    <thead className="text-xs text-center text-gray-700 uppercase bg-gray-50 light:bg-gray-700 dark:text-gray-400">
       <tr>
         {columns.map(({ name, label }: any) => {
           return (

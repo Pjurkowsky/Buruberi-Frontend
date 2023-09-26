@@ -10,6 +10,12 @@ function SideBar() {
       </div>
       <div className="flex flex-col">
         <Link
+          to="../admin/"
+          className="p-2.5 mt-3 mb-auto flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-neutral-200 text-black"
+        >
+          Dashboard
+        </Link>
+        <Link
           to="../admin/order"
           className="p-2.5 mt-3 mb-auto flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-neutral-200 text-black"
         >

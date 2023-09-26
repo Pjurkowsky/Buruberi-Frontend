@@ -10,3 +10,7 @@ body,
   margin: 0px;
   height: 100%;
 }
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-color: green;
+}
