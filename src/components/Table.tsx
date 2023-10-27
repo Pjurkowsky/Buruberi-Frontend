@@ -33,10 +33,12 @@ function Table({ columns, data }: TableProps) {
     }
   };
   return (
-    <table className="my-40 mx-20 h-5 text-sm text-left text-gray-500 dark:text-gray-400">
-      <TableHead columns={columns} handleSorting={handleSorting} />
-      <TableBody columns={columns} data={data} />
-    </table>
+    <div>
+      <table className="my-40 mx-20 h-5 text-sm text-left text-gray-500 dark:text-gray-400">
+        <TableHead columns={columns} handleSorting={handleSorting} />
+        <TableBody columns={columns} data={data} />
+      </table>
+    </div>
   );
 }
 

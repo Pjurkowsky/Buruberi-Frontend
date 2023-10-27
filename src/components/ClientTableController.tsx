@@ -52,7 +52,7 @@ function ClientTableController({ url, columns }: TablePanelProps) {
   };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
       <PopupCustomer onSubmit={handleCustomerSubmitted} />
       <Table columns={columns} data={data} />
     </div>
