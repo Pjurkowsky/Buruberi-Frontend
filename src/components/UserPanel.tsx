@@ -23,11 +23,6 @@ function UserPanel() {
     minHeight: "100vh",
   };
 
-  const style = {
-    height: "32rem",
-    width: "50rem",
-  };
-
   return (
     <div className="lg:flex w-full">
       <div className="lg:fixed ">
@@ -45,9 +40,9 @@ function UserPanel() {
         className="fixed ml-96 left-48 w-full z-0"
       ></div>
       {showPaymentPanel ? (
-        <PaymentPanel back={back} formData={formData} style={style} />
+        <PaymentPanel back={back} formData={formData} />
       ) : (
-        <FormPanel onSubmit={handleSubmit} formData={formData} style={style} />
+        <FormPanel onSubmit={handleSubmit} formData={formData} />
       )}
     </div>
   );

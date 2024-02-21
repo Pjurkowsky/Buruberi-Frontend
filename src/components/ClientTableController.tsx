@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import Table, { DataItem, TableColumn } from "./Table";
 import PopupCustomer from "./PopupCustomer";
 
+import { DataGrid } from "@mui/x-data-grid";
+
 interface TablePanelProps {
   url: URL;
-  columns: TableColumn[];
+  columns: any;
 }
 
 function flattenObject(obj: Record<string, any>, parentKey = ""): DataItem {
@@ -12,15 +14,20 @@ function flattenObject(obj: Record<string, any>, parentKey = ""): DataItem {
 
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const newKey = parentKey ? `${parentKey}.${key}` : key;
-      if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+      const newKey = parentKey ? `${parentKey}_${key}` : key;
+      if (
+        typeof obj[key] === "object" &&
+        obj[key] !== null &&
+        !Array.isArray(obj[key])
+      ) {
         const flattened = flattenObject(obj[key], newKey);
         Object.assign(result, flattened);
       } else {
-        result[key] = obj[key];
+        result[newKey] = obj[key];
       }
     }
   }
+
   return result;
 }
 
@@ -31,6 +38,7 @@ function ClientTableController({ url, columns }: TablePanelProps) {
   useEffect(() => {
     const dataFetch = async () => {
       const data = await (await fetch(url)).json();
+
       data.forEach(
         (
           element: Record<string, any>,
@@ -54,7 +62,7 @@ function ClientTableController({ url, columns }: TablePanelProps) {
   return (
     <div className="flex flex-col">
       <PopupCustomer onSubmit={handleCustomerSubmitted} />
-      <Table columns={columns} data={data} />
+      <DataGrid rows={data} columns={columns}></DataGrid>
     </div>
   );
 }

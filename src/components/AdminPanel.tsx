@@ -1,57 +1,66 @@
 import { Route, Routes } from "react-router-dom";
 import ClientTableController from "./ClientTableController";
 import SideBar from "./SideBar";
+import DashBoard from "./Dashboard";
+
+type DateArray = [number, number, number, number, number, number, number];
 
 const columnsCustomer = [
-  { name: "firstName", label: "Imię" },
-  { name: "lastName", label: "Nazwisko" },
-  { name: "emailAddress", label: "Email" },
-  { name: "phoneNumber", label: "Telefon" },
+  { field: "firstName", headerName: "Imię" },
+  { field: "lastName", headerName: "Nazwisko" },
+  { field: "emailAddress", headerName: "Email", minWidth: 100 },
+  { field: "phoneNumber", headerName: "Telefon", minWidth: 130 },
 ];
 
 const columnsOrder = [
-  { name: "firstName", label: "Imię" },
-  { name: "lastName", label: "Nazwisko" },
-  { name: "emailAddress", label: "Email" },
-  { name: "phoneNumber", label: "Telefon" },
-  { name: "amount", label: "Ilość" },
-  { name: "address", label: "Adres" },
-  { name: "city", label: "City" },
+  { field: "customer_firstName", headerName: "Imię" },
+  { field: "customer_lastName", headerName: "Nazwisko" },
   {
-    name: "createdDate",
-    label: "Data utworzenia",
-    format: (createdDate: string) => {
-      const formattedDate = new Date(parseInt(createdDate)); // Convert Unix timestamp to milliseconds
+    field: "customer_emailAddress",
+    headerName: "Email",
+    resizeable: true,
+    minWidth: 100,
+  },
+  {
+    field: "customer_phoneNumber",
+    headerName: "Telefon",
+    resizeable: true,
+    minWidth: 130,
+  },
+  { field: "amount", headerName: "Ilość", width: 40 },
+  { field: "address", headerName: "Adres" },
+  { field: "city", headerName: "Miasto" },
+  {
+    field: "createdDate",
+    headerName: "Data utworzenia",
+    width: 170,
+    valueGetter: (params: { value: DateArray }) => {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
-        month: "long",
+        month: "numeric",
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
       };
-      return formattedDate.toLocaleDateString("pl-PL", options);
+      return new Date(...params.value).toLocaleDateString("pl-PL", options);
     },
   },
   {
-    name: "deliveryDate",
-    label: "Zamówienie na",
-    format: (deliveryDate: [number, number, number]) => {
-      if (!deliveryDate) return deliveryDate;
-      const [year, month, day] = deliveryDate;
+    field: "deliveryDate",
+    headerName: "Zamówienie na",
+    width: 130,
+    valueGetter: (params: { value: string | number | Date }) => {
       const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
-        month: "long",
+        month: "numeric",
         day: "numeric",
       };
-      const formattedDate = new Date(year, month - 1, day).toLocaleDateString(
-        "pl-PL",
-        options
-      );
-      return formattedDate;
+
+      return new Date(params.value).toLocaleDateString("pl-PL", options);
     },
   },
-  { name: "description", label: "Opis" },
+  { field: "description", headerName: "Opis" },
 ];
 
 function AdminPanel() {
@@ -77,6 +86,7 @@ function AdminPanel() {
             />
           }
         />
+        <Route path="dashboard" element={<DashBoard />} />
       </Routes>
     </>
   );

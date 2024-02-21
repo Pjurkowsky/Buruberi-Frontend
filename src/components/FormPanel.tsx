@@ -11,12 +11,9 @@ import FormInput from "./FormInput";
 interface FormPanelProps {
   onSubmit: (formData: FormData) => void;
   formData: FormData;
-  style: React.CSSProperties;
 }
 
-function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
-  const [deliveryDate, setDeliveryDate] = useState<Dayjs | unknown>();
-
+function FormPanel({ onSubmit, formData }: FormPanelProps) {
   const [errorDeliveryDate, setErrorDeliveryDate] =
     useState<DateValidationError | null>(null);
 
@@ -34,6 +31,8 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
     emailAddress: useRef(null),
   };
 
+  const deliveryDate = useRef<any>();
+
   const objectwew = {
     firstName: "",
     lastName: "",
@@ -42,6 +41,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
     phoneNumber: "",
     amount: "",
     emailAddress: "",
+    deliveryDate: "",
   };
 
   let dataObject;
@@ -54,10 +54,6 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
 
   const handleDeliveryDateError = (newError: DateValidationError | null) => {
     setErrorDeliveryDate(newError);
-  };
-
-  const handleOnChangeDeliveryDate = (newDeliveryDate: Dayjs | null) => {
-    setDeliveryDate(newDeliveryDate);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -85,18 +81,16 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
       console.log("delivery");
       return;
     }
-    formData.append("deliveryDate", deliveryDate!.toString());
+    console.log(deliveryDate);
+    formData.append("deliveryDate", deliveryDate.current.value);
     onSubmit(formData);
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div
-        style={style}
-        className="z-10 bg-white m-auto shadow-xl p-5 lg:border-solid lg:border-2 lg:border-slate-400 rounded-2xl"
-      >
-        <form onSubmit={handleSubmit}>
-          <div className="grid md:grid-cols-2 md:gap-6 h-20 mb-4">
+      <div className="z-10 bg-white m-auto shadow-xl p-5 lg:border-solid lg:border-2 lg:border-slate-400 rounded-2xl lg:w-[50rem] lg:h-[32rem]">
+        <form onSubmit={handleSubmit} className="w-80 lg:w-full">
+          <div className="grid grid-cols-2 gap-3 md:gap-6 lg:h-20 mb-4">
             <FormInput
               type="text"
               name="firstName"
@@ -115,7 +109,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
             />
           </div>
 
-          <div className="grid md:grid-cols-2 md:gap-6 h-20 mb-4">
+          <div className="grid md:grid-cols-2 gap-3 md:gap-6 lg:h-20 mb-4">
             <FormInput
               type="text"
               name="address"
@@ -131,7 +125,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               ref={refs.city}
             />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 h-20 mb-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 lg:h-20 mb-4">
             <FormInput
               type="tel"
               name="phoneNumber"
@@ -139,7 +133,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               errorMessage="Numer telefonu nieprawidłowy"
               ref={refs.phoneNumber}
             />
-            <div className="lg col-span-2">
+            <div className="lg:col-span-2">
               <FormInput
                 type="email"
                 name="emailAddress"
@@ -150,7 +144,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               />
             </div>
           </div>
-          <div className="grid md:grid-cols-2 md:gap-6 h-20">
+          <div className="grid md:grid-cols-2 md:gap-6 lg:h-20">
             <FormInput
               type="text"
               name="amount"
@@ -159,12 +153,13 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               errorMessage="Pole powinno zawierać tylko liczby"
               ref={refs.amount}
             />
-            <div className="ml-5 ">
+            <div className="ml-5 mt-5 lg:mt-0">
               <DatePicker
-                onChange={handleOnChangeDeliveryDate}
                 disablePast
                 label="Wybierz date dostawy"
                 onError={handleDeliveryDateError}
+                inputRef={deliveryDate}
+                defaultValue={dayjs(dataObject.deliveryDate as string) as Dayjs}
                 minDate={dayjs()}
                 maxDate={dayjs().add(3, "month")}
               />
@@ -175,7 +170,7 @@ function FormPanel({ onSubmit, formData, style }: FormPanelProps) {
               )}
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-12 lg:mt-0">
             <div className="flex items-center h-5 ml-auto">
               <input
                 id="remember"

@@ -7,11 +7,12 @@ import fetchDataPost from "../utils/fetchData";
 interface PaymentPanelProps {
   back: () => void;
   formData: FormData;
-  style: React.CSSProperties;
 }
 
-function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
+function PaymentPanel({ back, formData }: PaymentPanelProps) {
   const dataObject = Object.fromEntries(formData);
+
+  console.log(Date.parse(dataObject.deliveryDate as string));
 
   const handleSubmit = async () => {
     const responseCustomer = await fetchDataPost(
@@ -46,12 +47,9 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div
-        style={style}
-        className="z-10 bg-white m-auto shadow-xl p-5 lg:border-solid lg:border-2 lg:border-slate-400 rounded-2xl"
-      >
-        <div className=" flex">
-          <div className="w-96">
+      <div className="z-10 bg-white m-auto shadow-xl p-5 lg:border-solid lg:border-2 lg:border-slate-400 rounded-2xl ">
+        <div className="flex">
+          <div className="lg:w-96 mr-10">
             <h2 className="mb-5"> Twoje dane: </h2>
             <div className="w-fit">
               <div className="">
@@ -105,7 +103,9 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
                 <DatePicker
                   disabled
                   label="Data dostawy"
-                  defaultValue={dayjs()} // TU KURWA JEST ZLE
+                  defaultValue={dayjs(
+                    Date.parse(dataObject.deliveryDate as string)
+                  )} // TU KURWA JEST ZLE
                 />
               </div>
             </div>
@@ -113,7 +113,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
           <form onSubmit={handleSubmit} className="flex flex-col">
             <div className="flex flex-col">
               <h2>Rodzaj płatności:</h2>
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 mt-2">
                 <input
                   id="default-radio-1"
                   type="radio"
@@ -121,10 +121,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
                   name="default-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
-                <label
-                  htmlFor="default-radio-1"
-                  className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
+                <label htmlFor="default-radio-1" className="ml-2  text-sm">
                   PayU (BLIK, przelew)
                 </label>
               </div>
@@ -137,15 +134,12 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
                   name="default-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
-                <label
-                  htmlFor="default-radio-2"
-                  className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                >
+                <label htmlFor="default-radio-2" className="ml-2 text-sm">
                   Płatność gotówka przy odbiorze
                 </label>
               </div>
             </div>
-            <div className="relative mt-2">
+            <div className="relative mt-4">
               <textarea
                 id="comment"
                 rows={5}
@@ -161,7 +155,7 @@ function PaymentPanel({ back, formData, style }: PaymentPanelProps) {
             </div>
           </form>
         </div>
-        <div className="flex  ">
+        <div className="flex">
           <button
             onClick={back}
             className="mt-3 mr-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-15 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

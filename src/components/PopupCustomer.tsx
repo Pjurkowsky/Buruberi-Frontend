@@ -53,7 +53,7 @@ function PopupCustomer({ onSubmit }: PopupCustomerProps) {
           setModal(!modal);
         }}
       >
-        Toggle modal
+        Dodaj klienta
       </button>
       {modal && (
         <div
@@ -64,7 +64,7 @@ function PopupCustomer({ onSubmit }: PopupCustomerProps) {
             <div className="relative bg-white rounded-lg shadow ">
               <div className="flex items-start justify-between p-4 border-b rounded-t ">
                 <h3 className="text-xl font-semibold text-gray-900">
-                  Add Customer
+                  Dodaj Klienta
                 </h3>
                 <button
                   type="button"
@@ -88,7 +88,7 @@ function PopupCustomer({ onSubmit }: PopupCustomerProps) {
                       d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
                     />
                   </svg>
-                  <span className="sr-only">Close modal</span>
+                  <span className="sr-only">Zamknij</span>
                 </button>
               </div>
               <form onSubmit={handleSubmit}>
@@ -132,7 +132,7 @@ function PopupCustomer({ onSubmit }: PopupCustomerProps) {
                     type="submit"
                     className="text-white ml-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                   >
-                    Save
+                    Zapisz
                   </button>
                 </div>
               </form>
