@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import Table, { DataItem, TableColumn } from "./Table";
 import PopupCustomer from "./PopupCustomer";
 
 import { DataGrid } from "@mui/x-data-grid";
 
+interface DataItem {
+  [key: string]: any;
+}
 interface TablePanelProps {
   url: URL;
   columns: any;
@@ -62,7 +64,11 @@ function ClientTableController({ url, columns }: TablePanelProps) {
   return (
     <div className="flex flex-col">
       <PopupCustomer onSubmit={handleCustomerSubmitted} />
-      <DataGrid rows={data} columns={columns}></DataGrid>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        onRowSelectionModelChange={(id) => console.log(id)}
+      ></DataGrid>
     </div>
   );
 }

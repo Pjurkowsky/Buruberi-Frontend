@@ -21,6 +21,7 @@ const regexPatterns = {
   names: /^[a-zA-ZęĘóÓąĄśŚłŁżŻźŹćĆńŃ]+$/,
   amount: /^[0-9]+$/,
   phone: /^\+\d{2} \d{3} \d{3} \d{3}$/,
+  zip: /^\d{2}-\d{3}$/,
 };
 
 const FormInput = forwardRef(
@@ -84,6 +85,8 @@ const FormInput = forwardRef(
               return validateInput(input, regexPatterns.amount);
             case "phoneNumber":
               return validateInput(input, regexPatterns.phone);
+            case "zipCode":
+              return validateInput(input, regexPatterns.zip);
           }
         }
         return false;
@@ -121,6 +124,37 @@ const FormInput = forwardRef(
                     />
                     <label htmlFor="phoneNumber" className={labelClassName}>
                       Telefon *
+                    </label>
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                      {error && (
+                        <span className="text-sm">{errorMessageText}</span>
+                      )}
+                    </p>
+                  </div>
+                );
+              case "zip":
+                return (
+                  <div>
+                    <PatternFormat
+                      className={inputClassName}
+                      placeholder=" "
+                      type="text"
+                      defaultValue={
+                        inputProps.defaultValue as
+                          | string
+                          | number
+                          | null
+                          | undefined
+                      }
+                      name="zipCode"
+                      id="zipCode"
+                      format="##-###"
+                      mask="_"
+                      onBlur={validateEvent}
+                      getInputRef={refInput}
+                    />
+                    <label htmlFor="phoneNumber" className={labelClassName}>
+                      Kod Pocztowy *
                     </label>
                     <p className="mt-2 text-sm text-red-600 dark:text-red-500">
                       {error && (

@@ -3,6 +3,8 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import fetchDataPost from "../utils/fetchData";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface PaymentPanelProps {
   back: () => void;
@@ -10,6 +12,8 @@ interface PaymentPanelProps {
 }
 
 function PaymentPanel({ back, formData }: PaymentPanelProps) {
+  const [paymentMethod, setPaymentMethod] = useState<string>("gotowka");
+  const navigate = useNavigate();
   const dataObject = Object.fromEntries(formData);
 
   console.log(Date.parse(dataObject.deliveryDate as string));
@@ -42,7 +46,35 @@ function PaymentPanel({ back, formData }: PaymentPanelProps) {
       new URL("http://localhost:8080/api/order/add"),
       JSON.stringify(orderObject)
     );
-    console.log(responseOrder);
+
+    const responseOrderData = await responseOrder?.json();
+
+    console.log(paymentMethod);
+
+    if (paymentMethod === "payu") {
+      const responseIPAddress = await fetch(
+        "https://api.ipify.org?format=json"
+      );
+
+      const responseIPAddressData = await responseIPAddress?.json();
+
+      console.log(responseOrderData, responseIPAddressData);
+
+      const responsePayment = await fetchDataPost(
+        new URL("http://localhost:8080/api/payment/"),
+        JSON.stringify({
+          dataBaseOrderId: responseOrderData?.id,
+          clientIpAddress: responseIPAddressData.ip,
+        })
+      );
+      const responsePaymentData = await responsePayment?.json();
+      if (responsePaymentData.redirectUri)
+        window.location.href = responsePaymentData.redirectUri;
+      else navigate("/order-error");
+    } else if (paymentMethod === "gotowka") {
+      console.log("gotowka");
+      navigate("/order-confirmations");
+    }
   };
 
   return (
@@ -118,6 +150,7 @@ function PaymentPanel({ back, formData }: PaymentPanelProps) {
                   id="default-radio-1"
                   type="radio"
                   value=""
+                  onChange={(e) => setPaymentMethod("payu")}
                   name="default-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
@@ -131,6 +164,7 @@ function PaymentPanel({ back, formData }: PaymentPanelProps) {
                   id="default-radio-2"
                   type="radio"
                   value=""
+                  onChange={(e) => setPaymentMethod("gotowka")}
                   name="default-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />

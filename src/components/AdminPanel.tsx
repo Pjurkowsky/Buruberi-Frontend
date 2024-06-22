@@ -1,9 +1,31 @@
-import { Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import ClientTableController from "./ClientTableController";
 import SideBar from "./SideBar";
 import DashBoard from "./Dashboard";
 
 type DateArray = [number, number, number, number, number, number, number];
+
+const columnsDriver = [
+  { field: "firstName", headerName: "Imię" },
+  { field: "lastName", headerName: "Nazwisko" },
+  { field: "phoneNumber", headerName: "Telefon", minWidth: 130 },
+  { field: "orderCount", headerName: "Ilość zamówień", minWidth: 130 },
+  {
+    field: "orders",
+    headerName: "Zamówienia",
+    minWidth: 130,
+    renderCell: (params: any) => {
+      return (
+        <button
+          type="submit"
+          className="text-white ml-auto bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          Chuj
+        </button>
+      );
+    },
+  },
+];
 
 const columnsCustomer = [
   { field: "firstName", headerName: "Imię" },
@@ -86,7 +108,17 @@ function AdminPanel() {
             />
           }
         />
-        <Route path="dashboard" element={<DashBoard />} />
+        <Route
+          path="driver"
+          element={
+            <ClientTableController
+              url={new URL("http://localhost:8080/api/driver")}
+              columns={columnsDriver}
+            />
+          }
+        />
+
+        <Route path="" element={<DashBoard />} />
       </Routes>
     </>
   );
